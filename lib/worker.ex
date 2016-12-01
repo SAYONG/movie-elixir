@@ -4,7 +4,9 @@ defmodule Movies.Worker do
         result = query |> url_of |> HTTPoison.get |> parse_response
         case result do
             {:ok, total_result} ->
-                "total movies #{total_result}"
+                "Total: #{total_result}"
+            :nothing ->
+                "Nothing"
             _ -> 
                 "error"
         end
@@ -17,7 +19,13 @@ defmodule Movies.Worker do
 
     defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}) do
         json = body |> JSON.decode!
-        {:ok, json["totalResults"]}
+        total_results = json["totalResult"]["nothing"]
+        cond do
+            is_nil(total_results) ->
+                :nothing 
+            true ->
+                {:ok, total_results}
+        end
     end
 
     defp parse_response(_) do
