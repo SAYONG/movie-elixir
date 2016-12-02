@@ -2,6 +2,7 @@ defmodule Movies.Worker do
     
     def search_movie(query) do
         query
+            |> URI.encode
             |> url_of
             |> HTTPoison.get 
             |> parse_response
@@ -12,11 +13,8 @@ defmodule Movies.Worker do
     defp display_result(:nothing), do: "Found nothing"
     defp display_result(_), do: "Unexpected result from the server"
 
-    defp url_of(query) do
-        encoded_query = URI.encode(query)
-        "http://www.omdbapi.com/?s=#{encoded_query}"
-    end
-
+    defp url_of(query), do: "http://www.omdbapi.com/?s=#{query}"
+    
     defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}) do
         json = body |> JSON.decode!
         total_results = json["totalResults"]
