@@ -8,17 +8,9 @@ defmodule Movies.Worker do
             |> display_result
     end
 
-    defp display_result({:ok, total_result}) do
-        "Total: #{total_result}"        
-    end
-
-    defp display_result(:nothing) do
-        "Found nothing"
-    end
-
-    defp display_result(_) do
-        "Unexpected result from the server"
-    end
+    defp display_result({:ok, total_result}), do: "Total: #{total_result}"
+    defp display_result(:nothing), do: "Found nothing"
+    defp display_result(_), do: "Unexpected result from the server"
 
     defp url_of(query) do
         encoded_query = URI.encode(query)
