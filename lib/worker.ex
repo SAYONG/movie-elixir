@@ -1,15 +1,23 @@
 defmodule Movies.Worker do
     
     def search_movie(query) do
-        result = query |> url_of |> HTTPoison.get |> parse_response
-        case result do
-            {:ok, total_result} ->
-                "Total: #{total_result}"
-            :nothing ->
-                "Nothing"
-            _ -> 
-                "error"
-        end
+        query
+            |> url_of
+            |> HTTPoison.get 
+            |> parse_response
+            |> display_result
+    end
+
+    defp display_result({:ok, total_result}) do
+        "Total: #{total_result}"        
+    end
+
+    defp display_result(:nothing) do
+        "Found nothing"
+    end
+
+    defp display_result(_) do
+        "Unexpected result from the server"
     end
 
     defp url_of(query) do
