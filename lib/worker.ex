@@ -9,25 +9,23 @@ defmodule Movies.Worker do
             |> display_result
     end
 
+    defp url_of(query), do: "http://www.omdbapi.com/?s=#{query}"
+
     defp display_result({:ok, total_result}), do: "Total: #{total_result}"
     defp display_result(:nothing), do: "Found nothing"
     defp display_result(_), do: "Unexpected result from the server"
 
-    defp url_of(query), do: "http://www.omdbapi.com/?s=#{query}"
-    
     defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}) do
-        json = body |> JSON.decode!
-        total_results = json["totalResults"]
-        cond do
-            is_nil(total_results) ->
-                :nothing 
-            true ->
-                {:ok, total_results}
-        end
+        body
+            |> JSON.decode!
+            |> get_total_results_from_json
+            |> construct_result
     end
+    defp parse_response(_), do: :error
 
-    defp parse_response(_) do
-        :error
-    end
+    defp get_total_results_from_json(json), do: json["totalResults"]
+
+    defp construct_result(result) when is_nil(result), do: :nothing
+    defp construct_result(result), do: {:ok, result}
 
 end
