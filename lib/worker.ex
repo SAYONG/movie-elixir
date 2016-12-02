@@ -19,7 +19,7 @@ defmodule Movies.Worker do
 
     defp parse_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}) do
         json = body |> JSON.decode!
-        total_results = json["totalResult"]["nothing"]
+        total_results = json["totalResults"]
         cond do
             is_nil(total_results) ->
                 :nothing 
