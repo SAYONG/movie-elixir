@@ -12,7 +12,7 @@ defmodule Movies.Worker do
         end
     end
 
-    def url_of(query) do
+    defp url_of(query) do
         encoded_query = URI.encode(query)
         "http://www.omdbapi.com/?s=#{encoded_query}"
     end
