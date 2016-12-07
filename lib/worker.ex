@@ -1,5 +1,14 @@
 defmodule Movies.Worker do
-    
+    def loop do
+        receive do
+            {sender_pid, query} ->
+                send(sender_pid, {:ok, search_movie(query)})
+            _ ->
+                send(sender_pid, {:error, "Wrong query!!"})
+        end
+        loop
+    end
+
     def search_movie(query) do
         query
             |> URI.encode
