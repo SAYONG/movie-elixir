@@ -4,7 +4,7 @@ defmodule Movies.Worker do
             {sender_pid, query} ->
                 send(sender_pid, {:ok, search_movie(query)})
             _ ->
-                send(sender_pid, {:error, "Wrong query!!"})
+                IO.puts "Wrong query!!"
         end
         loop
     end
