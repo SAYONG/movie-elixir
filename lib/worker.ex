@@ -20,7 +20,7 @@ defmodule Movies.Worker do
 
     defp url_of(query), do: "http://www.omdbapi.com/?s=#{query}"
 
-    defp display_result({:ok, results}), do: results
+    defp display_result({:ok, results}), do: hd results
     defp display_result(:nothing), do: "Found nothing"
     defp display_result(_), do: "Unexpected result from the server"
 
